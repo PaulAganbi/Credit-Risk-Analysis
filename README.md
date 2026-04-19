@@ -83,12 +83,14 @@ Three themes stood out in the analysis: borrower risk falls sharply as credit sc
 
 ### 4) Portfolio Risk and Decision Strategy
 
-* Expected Loss on the test set averaged about **1,978** per loan, with a median of **1,429** and a maximum of **9,221**.
 * The approval strategy separated accounts into three groups: **Approve**, **Review**, and **Reject**.
-* Approved loans had an average PD of only **13.7%** and an observed default rate of **14.7%**, while rejected loans averaged **57.2%** PD.
+* Approved loans maintain the lowest risk profile with an average PD of 13.7% and an observed default rate of 14.7%.
+* Rejected loans represent the highest risk, averaging 57.2% PD with a matching actual default rate of 56.3%.
+* By identifying high-risk applicants with a mean expected loss of 3,322, the model prevents significant capital erosion before it occurs. This strategic filtering ensures that capital is deployed toward the Approve segment, where losses are minimized to an average of just 819 per loan.
 * This shows that the decision framework meaningfully filters out high-risk applications, but the review band remains important for borderline borrowers.
 
-[Visualization specific to category 4]
+<img width="1490" height="390" alt="credit decision diagram" src="https://github.com/user-attachments/assets/cbe20ded-f9d4-4f12-95ca-ab2de7ed2d08" />
+
 
 ## Recommendations
 
@@ -107,15 +109,19 @@ Throughout the analysis, multiple assumptions were made to manage the synthetic 
 * The dataset is **synthetic** and was generated to resemble realistic loan performance patterns, so the results should be interpreted as a portfolio analytics exercise rather than a production scorecard.
 * A loan was treated as **defaulted if it entered `Default` status at any point** in its repayment history.
 * Monthly repayment status was used as the performance source of truth, while borrower attributes were treated as static at origination.
-* The calibration step was necessary because initial model probabilities were systematically higher than observed default rates.
+* The model calibration step was necessary because initial model probabilities were systematically higher than observed default rates.
 * Cohort labeling was based on cumulative performance, so “bad” and “good” cohorts reflect relative portfolio behavior rather than permanent borrower labels.
 * Any missing or unusual records in the original synthetic construction were handled conservatively to preserve analytical consistency.
 
-## Repository Contents
+## Tools & Technologies
 
-* `master_analytical_file.csv` – final modeling dataset
-* Python notebook – data generation, cleaning, EDA, feature engineering, modeling, and evaluation
-* SQL scripts – targeted business queries for portfolio and underwriting analysis
+* Python
+* Pandas
+* NumPy
+* Scikit-learn
+* SHAP
+* Matplotlib
+* Seaborn
 
 ## Final Note
 

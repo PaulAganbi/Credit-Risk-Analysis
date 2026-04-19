@@ -2,7 +2,7 @@
 
 ## Project Background
 
-This project analyzes a fictional neobank lending portfolio, the business operates in consumer unsecured lending, with products such as short-term personal loans and installment loans originated through a digital application journey.
+This project analyzes a neobank lending portfolio, the business operates in consumer unsecured lending, with products such as short-term personal loans and installment loans originated through a digital application journey.
 
 The company has been active throughout 2024 in this simulated dataset and uses a data-driven underwriting model to balance growth, credit quality, and portfolio profitability. The lending business model is straightforward: acquire borrowers digitally, approve loans based on borrower and loan characteristics, collect repayments over the life of the loan, and manage losses through risk-based decisioning.
 
@@ -48,36 +48,38 @@ These tables were combined into a master analytical file to create borrower-leve
 
 Three themes stood out in the analysis: borrower risk falls sharply as credit score and income rise, defaults tend to emerge later in the loan life cycle rather than immediately at origination, and the model is able to rank risk reasonably well even though its probability estimates required calibration. The main takeaway is that underwriting can be improved by tightening rules for low-score borrowers, using a review band for borderline applications, and monitoring bad cohorts more closely after origination.
 
-[Visualization, including a graph of overall trends or snapshot of a dashboard]
 
 ## Insights Deep Dive
 
 ### 1) Borrower Profile Risk
 
-* Borrowers in the lowest credit-score quintile had an observed default rate of **65.3%**, compared with **14.2%** in the highest quintile.
-* Default rates also declined steadily with income: the lowest income quintile showed a **43.7%** default rate versus **28.2%** in the highest income quintile.
-* This confirms a strong risk gradient across core underwriting variables, especially credit score.
-* Loan size also contributes to risk, particularly when paired with lower income and weaker credit profiles.
+* Borrower risk is strongly differentiated when segmented by predicted probability of default (PD) deciles. Loans in the highest-risk decile show materially higher observed default rates compared to the lowest-risk decile, confirming that the model provides effective rank ordering of risk.
+* The relationship between credit score and default risk is clearly monotonic: lower credit score segments consistently exhibit higher default rates. This reinforces credit score as one of the most important drivers of borrower risk in the portfolio.
+* Income also shows a negative relationship with default, though less pronounced than credit score. Lower-income borrowers tend to default at higher rates, particularly when combined with weaker credit profiles.
+* When combining features, risk compounds: borrowers with low credit scores and lower income levels represent the highest-risk segment of the portfolio.
 
-[Visualization specific to category 1]
+<img width="846" height="470" alt="decile_analysis" src="https://github.com/user-attachments/assets/75bf29d9-2617-47c6-af42-efc62308fda7" />
+<img width="460" height="680" alt="SHAP model explainability" src="https://github.com/user-attachments/assets/96984752-8ce9-435e-894e-75c6a2be1b07" />
+
 
 ### 2) Loan Performance and Default Timing
 
-* The repayment table shows **118,277 Current** statuses and **25,723 Default** statuses, indicating that delinquency is meaningful but not overwhelming in the portfolio.
 * Defaults do not appear evenly across the loan lifecycle; they tend to cluster after a few months on books, which is consistent with real-world credit behavior.
 * This suggests that early performance monitoring is important, but the company should also pay close attention to medium-term seasoning risk.
 * Vintage tracking helps identify cohorts that deteriorate faster than the portfolio average.
 
-[Visualization specific to category 2]
+<img width="917" height="547" alt="vintage-analysis" src="https://github.com/user-attachments/assets/826fe86b-2416-4533-89cd-2528cb3b1d18" />
+
 
 ### 3) Model Performance and Risk Ranking
 
-* The Random Forest model achieved an **AUC of 0.7108**, which indicates moderate discriminative power.
-* On the test set, the model produced **67% accuracy**, with default-class recall of **0.59** and precision of **0.54**.
+* The Random Forest model achieved an **AUC of 0.71**, which indicates moderate discriminative power.
 * Decile analysis showed strong rank ordering: predicted PD increased steadily from the lowest to highest risk deciles, and actual default rates rose in the same direction.
 * However, predicted probabilities were initially too high relative to observed rates, so calibration was used to improve interpretability.
 
-[Visualization specific to category 3]
+<img width="536" height="470" alt="AUC diagram" src="https://github.com/user-attachments/assets/483fae89-cfd5-4661-888d-3b9f16468f63" />
+<img width="536" height="547" alt="DR to PD diagram" src="https://github.com/user-attachments/assets/262c7721-9a12-4d79-9b87-dba08a089f92" />
+
 
 ### 4) Portfolio Risk and Decision Strategy
 
